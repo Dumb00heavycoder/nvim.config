@@ -1,0 +1,4 @@
+lazyvim
+catppuccin
+telescope
+treesitter
