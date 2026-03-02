@@ -15,9 +15,9 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 local plugins = {
-	{ "catppuccin/nvim", name = "catppuccin", priority = 1000 },
+	{"catppuccin/nvim", name = "catppuccin", priority = 1000 },
 	{
- 	   'nvim-telescope/telescope.nvim', version = '*',
+ 	'nvim-telescope/telescope.nvim', version = '*',
     	dependencies = {
         	'nvim-lua/plenary.nvim',
         	{ 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
@@ -25,25 +25,48 @@ local plugins = {
 	},
 	{
 	'nvim-treesitter/nvim-treesitter',
-  	lazy = false,
-  	build = ':TSUpdate'
+  	build = ':TSUpdate',
+	config = function()
+    	local config = require("nvim-treesitter.configs")
+
+    	config.setup({
+      		ensure_installed = { "lua", "javascript" },
+      		highlight = { enable = true },
+      		indent = { enable = true },
+    		})
+  	end,
 	},
+	{
+       "nvim-neo-tree/neo-tree.nvim",
+    	branch = "v3.x",
+    	dependencies = {
+      	"nvim-lua/plenary.nvim",
+      	"MunifTanjim/nui.nvim",
+      	"nvim-tree/nvim-web-devicons", -- optional, but recommended
+    	},
+    	lazy = false, -- neo-tree will lazily load itself
+  	},
+    	{
+    	"mason-org/mason.nvim",
+    	opts = {}
+    	},
 }
+
 local opts = {}
 
+
 require("lazy").setup(plugins, opts)
+
+vim.keymap.set('n', '<C-n>', ':Neotree filesystem reveal left<CR>', {})
 
 local builtin = require("telescope.builtin")
 vim.keymap.set('n', '<C-p>', builtin.find_files,{})
 
-local config = require("nvim-treesitter.configs")
-config.setup({
-	ensure_installed = {"lua", "javascript"},
-	highlight = {enable = true},
-	indent = {enable = true},
-})
+
+
 require("catppuccin").setup()
 vim.cmd.colorscheme "catppuccin"
 
+require("mason").setup() 
 
 
