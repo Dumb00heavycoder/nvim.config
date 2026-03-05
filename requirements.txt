@@ -2,3 +2,5 @@ lazyvim
 catppuccin
 telescope
 treesitter
+neotree
+lualine
